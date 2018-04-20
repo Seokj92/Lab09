@@ -1,5 +1,6 @@
 package edu.handong.csee.java.lab09; //package name
 
+import java.util.ArrayList;
 import java.util.Scanner; //importing a package, java.util.Scanner
 
 /**
@@ -14,8 +15,8 @@ public class SalesReporter {
 	
 	private double highestSales; //declare a double variable
 	private double averageSales; //declare a double variable
-	private SalesAssociate[] team; //declare 1-D array.
-	private int numOfSalesman; //declare int variable.
+	private ArrayList<SalesAssociate> list = new ArrayList<SalesAssociate>(); //declare arraylist.
+	public int numOfSalesman; //declare int variable.
 	
 	/**
 	 * This is a method to get the number of sales associate from user.	 *
@@ -50,27 +51,34 @@ public class SalesReporter {
 
 	public void get_Data() {
 		
-		team = new SalesAssociate[numOfSalesman]; // make a array instance.
+		boolean done = false; //declare boolean variable.
 		
-		for(int i=0; i<numOfSalesman; i++) { // run this loop as many times as number of salesman.
+		while(!done) { //when done returns false, run below sentence
 			
 			Scanner myScanner = new Scanner(System.in); //make the Scanner instance to get the number from keyboard.
 			
-			System.out.println("Enter data for associate number : " + (i+1)); //print out the string.
-			
+						
 			System.out.print("Enter name of sales associate : " ); // print out the string.
 			String name = myScanner.nextLine(); //get the name from user(Keyboard).
-			
 			System.out.print("Enter associate's sales : $"); //print out the string.
 			double sales = myScanner.nextDouble(); //get the sales from user(Keyboard).
 			
 			SalesAssociate mySalesman = new SalesAssociate(); //instantiate SalesAssociate class
 			mySalesman.set_name(name); //call the instance and set the name.
 			mySalesman.set_Sales(sales); //call the instance and set the sales.
+			list.add(mySalesman); //add mySalesman to the list.
 			
-			team[i] = mySalesman; //initialize the array.
-			
+
+			System.out.println("more item for the list?(enter Yes if you want)"); //print out the string.
+			String enter = myScanner.nextLine(); // '\w' react with nextline(), so this sentence is needed.						
+			String ans = myScanner.nextLine();//get the answer from user
+			if (!ans.equalsIgnoreCase("Yes"))
+				done = true; //if input is not Yes or yes(do not care about whether word is upper case or not), exit this loop.
 		}
+		
+		
+			
+			
 	}
 	
 	/**
@@ -80,13 +88,14 @@ public class SalesReporter {
 	public void calculateAverage() {
 		
 		double sum = 0; //initialize the value of sum
+		int listLength = list.size(); //declare int variable
 		
-		for(int i=0; i< team.length; i++) { //run the loop as many times as number of salesman.
+		for(SalesAssociate member : list) { //run the loop as many times as number of salesman.
 			
-			double sales = team[i].get_Sales(); //get the sales from array.
-			sum = sum + sales; // add all of the sales.
+			double i = member.get_Sales(); //get the sales from arraylist
+			sum = sum + i; // add all of the sales.
 		}
-	averageSales = sum/team.length; //calculate the average of sales.
+	averageSales = sum/listLength; //calculate the average of sales.
 	
 	}
 	
@@ -96,17 +105,19 @@ public class SalesReporter {
 	
 
 	public void highestSales() {
+		
+		double num = 0; //declare double variable.
 	
-		for(int i=0; i<team.length-1; i++) { //compare each other.(this loop run (person-1)times.
+		for(SalesAssociate member : list) { //compare each other. run the loop as many times as number of salesman.
 			
-			if(team[i].get_Sales() < team[i+1].get_Sales()) { //compare the two sales.
+			if(member.get_Sales() > num) { //compare the two sales.
 				
-				highestSales = team[i+1].get_Sales(); //get the highestsales person.
+				num = member.get_Sales(); //get the highestsales person.
 				
 				
 			}
 		}
-			
+		highestSales = num;	// initiate highestSales with num.
 	}
 	
 	/**
@@ -120,27 +131,27 @@ public class SalesReporter {
 		
 		System.out.println("The following had the highest sales :"); //print out the string
 		
-		for(int i=0; i < team.length; i++) { //run this loop as many times as number of salesman.
-			if(team[i].get_Sales() == highestSales) { //when the person is highestsales person print out below sentences.
-				System.out.println("Name : " +team[i].get_Name()); //print out the name
-				System.out.println("Sales : $" + team[i].get_Sales()); //print out the sales
+		for(SalesAssociate member : list) { //run this loop as many times as number of salesman.
+			if(member.get_Sales() == highestSales) { //when the person is highestsales person print out below sentences.
+				System.out.println("Name : " +member.get_Name()); //print out the name
+				System.out.println("Sales : $" + member.get_Sales()); //print out the sales
 				System.out.println("$" + (highestSales-averageSales)+" above the average \n"); //print out the difference between highestsales and average.
 			}
 		}
 		
 		
 		System.out.println("The rest performed as follows :"); //print out the string.
-		for(int i=0; i < team.length; i++) { // run this loop as many times as number of salesman.
-			if(team[i].get_Sales() < highestSales) { //when the person is not highestsales peroson, print out below sentences.
-				System.out.println("Name : " +team[i].get_Name()); //print out the name
-				System.out.println("Sales : $" + team[i].get_Sales()); //print out the sales
+		for(SalesAssociate member : list) { // run this loop as many times as number of salesman.
+			if(member.get_Sales() < highestSales) { //when the person is not highestsales peroson, print out below sentences.
+				System.out.println("Name : " +member.get_Name()); //print out the name
+				System.out.println("Sales : $" + member.get_Sales()); //print out the sales
 				
-				if(team[i].get_Sales() > averageSales) { //when person's sales is bigger than average. print out below sentence.
-					System.out.println("$" + (team[i].get_Sales()-averageSales) + " above the average.\n"); //print out the difference between sales and average.
+				if(member.get_Sales() > averageSales) { //when person's sales is bigger than average. print out below sentence.
+					System.out.println("$" + (member.get_Sales()-averageSales) + " above the average.\n"); //print out the difference between sales and average.
 				}
 				
 				else //when person's sales is smaller than average. print out below sentence
-					System.out.println("$" + (averageSales-team[i].get_Sales()) + " below the average."); ///print out the difference between sale and average.		
+					System.out.println("$" + (averageSales-member.get_Sales()) + " below the average."); ///print out the difference between sale and average.		
 	}
 	
 		}
