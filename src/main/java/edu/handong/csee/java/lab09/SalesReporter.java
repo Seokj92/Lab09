@@ -1,6 +1,6 @@
 package edu.handong.csee.java.lab09; //package name
 
-import java.util.ArrayList;
+import java.util.ArrayList; //importing a package, java.util.ArrayList
 import java.util.Scanner; //importing a package, java.util.Scanner
 
 /**
